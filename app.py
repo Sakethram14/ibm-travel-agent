@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 import io
-import requests # <-- ADDED
-import json     # <-- ADDED
+import requests 
+import json
 
 # --- Section 1: Data Loading (No changes here) ---
 # This data is included directly in the script for simple deployment.
@@ -57,16 +57,14 @@ def retrieve_context(query):
         return "No specific city information found. Provide a general plan."
     return "\n\n".join(context_parts)
 
-# --- START OF UPDATED SECTION ---
-# This function has been completely replaced to use direct API calls.
-
 def generate_plan(user_query):
     """
     Generates a travel plan by calling the IBM Watsonx.ai API directly.
     """
+    # --- THIS IS THE CORRECTED PART ---
     try:
-        api_key = st.secrets["3P8a3zno0Ufk42tTD-Obvv14ww1x1uWDmZJdlljZ0lF4"]
-        project_id = st.secrets["3fabfab1-8f83-4f0a-9a5d-aea9abc45919"]
+        api_key = st.secrets["IBM_API_KEY"]
+        project_id = st.secrets["WATSONX_PROJECT_ID"]
     except FileNotFoundError:
         return "Error: Secrets file not found. This app must be deployed on Streamlit Community Cloud with secrets configured."
 
@@ -134,9 +132,6 @@ def generate_plan(user_query):
         return response_json['results'][0]['generated_text']
     except requests.exceptions.RequestException as e:
         return f"Error calling generation API: {e}\nResponse: {generation_response.text}"
-
-# --- END OF UPDATED SECTION ---
-
 
 # --- Section 3: Streamlit User Interface (No changes here) ---
 st.set_page_config(page_title="AI Travel Planner", layout="centered")
